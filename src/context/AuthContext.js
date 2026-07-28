@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [scanCount, setScanCount] = useState(14); // Base scan counter
 
   useEffect(() => {
     loadStoredAuth();
@@ -25,6 +26,10 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const incrementScanCount = () => {
+    setScanCount((prev) => prev + 1);
   };
 
   const login = async (email, password) => {
@@ -67,6 +72,8 @@ export const AuthProvider = ({ children }) => {
         user,
         token,
         loading,
+        scanCount,
+        incrementScanCount,
         isAuthenticated: !!user && !!token,
         login,
         signup,

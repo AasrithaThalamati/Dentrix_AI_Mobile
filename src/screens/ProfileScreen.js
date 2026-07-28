@@ -11,12 +11,12 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
-import DentrixLogo from '../components/DentrixLogo';
+import HeaderBar from '../components/HeaderBar';
 import { useAuth } from '../context/AuthContext';
 import { profileService } from '../services/api';
 
 export default function ProfileScreen() {
-  const { user, logout, updateUser } = useAuth();
+  const { user, logout, updateUser, scanCount } = useAuth();
 
   const [name, setName] = useState(user?.name || '');
   const [email, setEmail] = useState(user?.email || '');
@@ -40,7 +40,7 @@ export default function ProfileScreen() {
     try {
       await profileService.update({ name, email, clinic, specialty });
       updateUser({ name, email, clinic, specialty });
-      Alert.alert('Profile Updated', 'Your doctor details have been saved to MongoDB.');
+      Alert.alert('Profile Updated', 'Your doctor details have been saved.');
     } catch (err) {
       Alert.alert('Error', err.message || 'Failed to update profile.');
     } finally {
@@ -70,11 +70,7 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Navbar */}
-      <View style={styles.navbar}>
-        <DentrixLogo size={32} showText={true} />
-        <Text style={styles.pageBadge}>Doctor Profile</Text>
-      </View>
+      <HeaderBar title="Doctor Profile" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Profile Card Banner */}
@@ -87,6 +83,24 @@ export default function ProfileScreen() {
           <Text style={styles.bannerName}>{name || 'Dr. Sarah Jenkins'}</Text>
           <Text style={styles.bannerEmail}>{email || 'dr.jenkins@dentrix.ai'}</Text>
           <Text style={styles.bannerClinic}>{clinic || 'Apex Dental Specialist Center'}</Text>
+        </View>
+
+        {/* Live Doctor Scan Telemetry Card */}
+        <View style={styles.statsCardGrid}>
+          <View style={styles.statBox}>
+            <Text style={styles.statBoxNumber}>{scanCount}</Text>
+            <Text style={styles.statBoxLabel}>Total Scans</Text>
+          </View>
+          <View style={styles.statBoxDivider} />
+          <View style={styles.statBox}>
+            <Text style={styles.statBoxNumber}>91.4%</Text>
+            <Text style={styles.statBoxLabel}>Avg Quality</Text>
+          </View>
+          <View style={styles.statBoxDivider} />
+          <View style={styles.statBox}>
+            <Text style={[styles.statBoxNumber, { color: '#059669' }]}>Active</Text>
+            <Text style={styles.statBoxLabel}>AI Telemetry</Text>
+          </View>
         </View>
 
         {/* Doctor Details Form */}
@@ -232,15 +246,22 @@ export default function ProfileScreen() {
             />
 
             <View style={styles.modalActions}>
-              <TouchableOpacity onPress={() => setPassModalVisible(false)} style={styles.modalCancelBtn}>
+              <TouchableOpacity
+                onPress={() => setPassModalVisible(false)}
+                style={styles.modalCancelBtn}
+              >
                 <Text style={styles.modalCancelText}>Cancel</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={handleChangePassword} disabled={changingPass} style={styles.darkBtn}>
+              <TouchableOpacity
+                onPress={handleChangePassword}
+                disabled={changingPass}
+                style={styles.modalConfirmBtn}
+              >
                 {changingPass ? (
                   <ActivityIndicator color="#ffffff" />
                 ) : (
-                  <Text style={styles.darkBtnText}>Update Password</Text>
+                  <Text style={styles.modalConfirmText}>Update Password</Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -256,25 +277,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#ffffff',
   },
-  navbar: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingTop: 54,
-    paddingBottom: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e8e6e1',
-  },
-  pageBadge: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#2563eb',
-    backgroundColor: '#eff6ff',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
   scrollContent: {
     padding: 16,
     paddingBottom: 120,
@@ -282,130 +284,161 @@ const styles = StyleSheet.create({
   profileBanner: {
     backgroundColor: '#fafaf9',
     borderRadius: 20,
-    padding: 24,
+    padding: 20,
     alignItems: 'center',
-    marginBottom: 20,
     borderWidth: 1,
     borderColor: '#e8e6e1',
+    marginBottom: 14,
   },
   avatarLarge: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 72,
+    height: 72,
+    borderRadius: 36,
     backgroundColor: '#2563eb',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 12,
   },
   avatarTextLarge: {
-    fontSize: 28,
-    fontWeight: '800',
     color: '#ffffff',
+    fontSize: 30,
+    fontWeight: '800',
   },
   bannerName: {
     fontSize: 20,
     fontWeight: '800',
     color: '#1a1916',
+    marginBottom: 2,
   },
   bannerEmail: {
     fontSize: 13,
     color: '#6b6760',
-    marginTop: 2,
+    marginBottom: 2,
   },
   bannerClinic: {
     fontSize: 12,
     color: '#2563eb',
     fontWeight: '700',
-    marginTop: 4,
   },
-  card: {
+  statsCardGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     backgroundColor: '#fafaf9',
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 20,
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
     borderWidth: 1,
     borderColor: '#e8e6e1',
+    marginBottom: 20,
   },
-  cardTitle: {
-    fontSize: 16,
+  statBox: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  statBoxDivider: {
+    width: 1,
+    height: 28,
+    backgroundColor: '#e8e6e1',
+  },
+  statBoxNumber: {
+    fontSize: 20,
     fontWeight: '800',
-    color: '#1a1916',
+    color: '#2563eb',
+  },
+  statBoxLabel: {
+    fontSize: 10,
+    color: '#6b6760',
+    marginTop: 2,
+    fontWeight: '600',
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#e8e6e1',
     marginBottom: 16,
   },
-  inputGroup: {
+  cardTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#1a1916',
     marginBottom: 14,
+  },
+  inputGroup: {
+    marginBottom: 12,
   },
   inputLabel: {
     fontSize: 12,
     fontWeight: '700',
     color: '#1a1916',
-    marginBottom: 6,
+    marginBottom: 4,
   },
   input: {
-    backgroundColor: '#ffffff',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    color: '#1a1916',
-    fontSize: 14,
+    backgroundColor: '#fafaf9',
     borderWidth: 1,
     borderColor: '#e8e6e1',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 14,
+    color: '#1a1916',
   },
   darkBtn: {
     backgroundColor: '#1a1916',
-    borderRadius: 12,
-    paddingVertical: 14,
+    borderRadius: 10,
+    paddingVertical: 13,
     alignItems: 'center',
     marginTop: 8,
   },
   darkBtnText: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
   },
   switchRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e8e6e1',
+    marginBottom: 12,
   },
   switchLabel: {
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
     color: '#1a1916',
   },
   switchSub: {
     fontSize: 11,
-    color: '#a8a49d',
-    marginTop: 2,
+    color: '#6b6760',
+    marginTop: 1,
   },
   passBtn: {
-    backgroundColor: '#ffffff',
-    paddingVertical: 14,
-    borderRadius: 12,
-    alignItems: 'center',
+    backgroundColor: '#fafaf9',
     borderWidth: 1,
     borderColor: '#e8e6e1',
+    borderRadius: 10,
+    paddingVertical: 12,
+    alignItems: 'center',
   },
   passBtnText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '700',
     color: '#1a1916',
   },
   logoutBtn: {
     backgroundColor: '#fee2e2',
-    paddingVertical: 16,
-    borderRadius: 16,
-    alignItems: 'center',
     borderWidth: 1,
     borderColor: '#fca5a5',
-    marginTop: 10,
+    borderRadius: 12,
+    paddingVertical: 14,
+    alignItems: 'center',
+    marginTop: 4,
+    marginBottom: 20,
   },
   logoutBtnText: {
     color: '#dc2626',
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '800',
   },
   modalOverlay: {
@@ -417,9 +450,7 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: '#ffffff',
     borderRadius: 20,
-    padding: 24,
-    borderWidth: 1,
-    borderColor: '#e8e6e1',
+    padding: 20,
   },
   modalTitle: {
     fontSize: 18,
@@ -429,26 +460,37 @@ const styles = StyleSheet.create({
   },
   modalInput: {
     backgroundColor: '#fafaf9',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    color: '#1a1916',
-    fontSize: 14,
-    marginBottom: 12,
     borderWidth: 1,
     borderColor: '#e8e6e1',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    fontSize: 14,
+    color: '#1a1916',
+    marginBottom: 12,
   },
   modalActions: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    alignItems: 'center',
     marginTop: 8,
   },
   modalCancelBtn: {
-    marginRight: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    marginRight: 8,
   },
   modalCancelText: {
     color: '#6b6760',
-    fontSize: 14,
+    fontWeight: '700',
+  },
+  modalConfirmBtn: {
+    backgroundColor: '#2563eb',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+  },
+  modalConfirmText: {
+    color: '#ffffff',
+    fontWeight: '700',
   },
 });

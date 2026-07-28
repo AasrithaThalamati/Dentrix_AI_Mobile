@@ -14,10 +14,12 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import HeaderBar from '../components/HeaderBar';
+import { useAuth } from '../context/AuthContext';
 import { evaluateDatasetImage } from '../services/datasetService';
 import { historyService, patientsService } from '../services/api';
 
 export default function AnalyzeScreen({ route, navigation }) {
+  const { incrementScanCount } = useAuth();
   const initialMode = route?.params?.mode === 'smile' ? 'smile' : 'xray';
   const [mode, setMode] = useState(initialMode);
 
@@ -127,6 +129,9 @@ export default function AnalyzeScreen({ route, navigation }) {
         } else {
           setXrayResult(evalResult);
           setInvalidError(null);
+          if (typeof incrementScanCount === 'function') {
+            incrementScanCount();
+          }
         }
       }
       setAnalyzing(false);
