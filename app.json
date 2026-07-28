@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Dentrix AI",
+    "slug": "dentrix-ai",
+    "version": "1.0.0",
+    "sdkVersion": "54.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "scheme": "dentrixai",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.dentrix.ai",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Dentrix AI requires camera access to capture dental X-rays and patient facial photographs for AI analysis.",
+        "NSPhotoLibraryUsageDescription": "Dentrix AI requires photo library access to upload dental scans and patient photos."
+      }
+    },
+    "android": {
+      "package": "com.dentrix.ai",
+      "adaptiveIcon": {
+        "backgroundColor": "#0f172a"
+      },
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
+    }
+  }
+}
