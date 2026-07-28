@@ -183,7 +183,7 @@ export default function ProfileScreen() {
           <View style={styles.switchRow}>
             <View>
               <Text style={styles.switchLabel}>Auto Cloud Sync</Text>
-              <Text style={styles.switchSub}>Sync patient scans to MongoDB</Text>
+              <Text style={styles.switchSub}>Sync patient scans to clinical database</Text>
             </View>
             <Switch
               value={autoSync}

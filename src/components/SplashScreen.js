@@ -64,7 +64,7 @@ export default function SplashScreen({ onFinish }) {
         <Text style={styles.subtitle}>Clinical Endodontic & Aesthetic AI</Text>
         <View style={styles.syncBadge}>
           <View style={styles.syncDot} />
-          <Text style={styles.syncText}>Connected to MongoDB Engine</Text>
+          <Text style={styles.syncText}>Clinical AI Engine Connected</Text>
         </View>
 
         <ActivityIndicator color="#2563eb" style={{ marginTop: 28 }} size="small" />

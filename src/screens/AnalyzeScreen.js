@@ -194,7 +194,7 @@ export default function AnalyzeScreen({ route, navigation }) {
         >
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Ionicons name="folder-open-outline" size={16} color="#2563eb" style={{ marginRight: 6 }} />
-            <Text style={styles.sampleDrawerTitle}>Test Images 2 Dataset Radiographs</Text>
+            <Text style={styles.sampleDrawerTitle}>Sample Radiographs</Text>
           </View>
           <Ionicons name={showSampleDrawer ? 'chevron-up' : 'chevron-down'} size={16} color="#6b6760" />
         </TouchableOpacity>
@@ -289,7 +289,7 @@ export default function AnalyzeScreen({ route, navigation }) {
               </View>
               <Text style={styles.uploadTitle}>Upload Root Canal Radiograph</Text>
               <Text style={styles.uploadDesc}>
-                Periapical (IOPA) & CBCT radiograph slices (Images 2 Dataset compatible)
+                Periapical (IOPA) & CBCT radiograph slices
               </Text>
 
               <View style={styles.pickerRow}>
@@ -379,7 +379,7 @@ export default function AnalyzeScreen({ route, navigation }) {
               </TouchableOpacity>
 
               <Text style={styles.aiConsoleFooterNote}>
-                🔒 Encrypted HIPAA Compliant • Direct MongoDB Sync
+                🔒 Encrypted HIPAA Compliant • Real-time Cloud Sync
               </Text>
             </View>
           </View>
@@ -447,6 +447,9 @@ export default function AnalyzeScreen({ route, navigation }) {
                 <Text style={styles.paramName}>Length Adequacy</Text>
                 <Text style={styles.paramScore}>{xrayResult.lengthScore}/4</Text>
               </View>
+              <View style={styles.paramBarBg}>
+                <View style={[styles.paramBarFill, { width: `${Math.min(100, Math.max(10, (xrayResult.lengthScore / 4) * 100))}%` }]} />
+              </View>
               <Text style={styles.paramSub}>{xrayResult.lengthSub}</Text>
             </View>
 
@@ -467,6 +470,9 @@ export default function AnalyzeScreen({ route, navigation }) {
               <View style={styles.paramHeader}>
                 <Text style={styles.paramName}>Taper Continuity</Text>
                 <Text style={styles.paramScore}>{xrayResult.taperScore}/3</Text>
+              </View>
+              <View style={styles.paramBarBg}>
+                <View style={[styles.paramBarFill, { width: `${Math.min(100, Math.max(10, (xrayResult.taperScore / 3) * 100))}%` }]} />
               </View>
               <Text style={styles.paramSub}>{xrayResult.taperSub}</Text>
             </View>
@@ -496,7 +502,7 @@ export default function AnalyzeScreen({ route, navigation }) {
               style={styles.saveRecordBtn}
             >
               <Ionicons name="bookmark-outline" size={18} color="#2563eb" style={{ marginRight: 6 }} />
-              <Text style={styles.saveRecordText}>Save to Patient Record & MongoDB</Text>
+              <Text style={styles.saveRecordText}>Save to Patient Record</Text>
             </TouchableOpacity>
           </View>
         )}

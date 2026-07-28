@@ -143,14 +143,14 @@ export default function DashboardScreen({ navigation }) {
         <View style={styles.doctorWelcomeRow}>
           <Text style={styles.welcomeGreeting}>Welcome back,</Text>
           <Text style={styles.welcomeDoctorName}>{doctorDisplayName}</Text>
-          <Text style={styles.welcomeClinicSub}>{clinicDisplayName} • MongoDB Active</Text>
+          <Text style={styles.welcomeClinicSub}>{clinicDisplayName} • AI Cloud Active</Text>
         </View>
 
         {/* Hero Card */}
         <View style={styles.heroCard}>
           <View style={styles.heroTagBadge}>
             <View style={styles.livePulseDot} />
-            <Text style={styles.heroTagText}>MongoDB Connected • Real-time AI</Text>
+            <Text style={styles.heroTagText}>Clinical System Active • Real-time AI</Text>
           </View>
 
           <Text style={styles.heroTitle}>
@@ -158,7 +158,7 @@ export default function DashboardScreen({ navigation }) {
           </Text>
 
           <Text style={styles.heroDescription}>
-            Evaluate root canal obturation quality across length, density, and sealer voids, synchronized with your practice MongoDB database.
+            Evaluate root canal obturation quality across length, density, and sealer voids, synchronized with your practice clinical database.
           </Text>
 
           {/* Action CTAs */}
